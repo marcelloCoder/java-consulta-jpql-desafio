@@ -59,7 +59,6 @@ public class SaleController {
 			@RequestParam(value = "minDate", required = false) String minDate,
 			@RequestParam(value = "maxDate", required = false) String maxDate) {
 
-		// Chama o serviço para buscar o sumário de vendas com base nas datas
 		List<SalesSummaryDTO> summary = service.getSalesSummary(minDate, maxDate);
 		return ResponseEntity.ok(summary);
 	}
