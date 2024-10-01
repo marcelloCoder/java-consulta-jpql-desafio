@@ -50,6 +50,7 @@ public class SaleService {
 		return repository.findSales(minDate, maxDate, sellerName, pageable);
 	}
 
+
 	public List<SalesSummaryDTO> getSalesSummary(String minDateStr, String maxDateStr) {
 
 		LocalDate maxDate = Optional.ofNullable(maxDateStr)

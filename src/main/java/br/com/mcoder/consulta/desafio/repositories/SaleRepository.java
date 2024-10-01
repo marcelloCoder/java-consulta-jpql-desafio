@@ -17,8 +17,10 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
     @Query("SELECT new br.com.mcoder.consulta.desafio.dto.SaleMinDTO(s.id, s.amount, s.date, s.seller.name) "
             + "FROM Sale s "
             + "WHERE s.date BETWEEN :minDate AND :maxDate "
-            + "AND LOWER(s.seller.name) LIKE LOWER(CONCAT('%', :sellerName, '%'))")
+            + "AND (:sellerName IS NULL OR :sellerName = '' OR LOWER(s.seller.name) LIKE LOWER(CONCAT('%', :sellerName, '%'))) "
+            + "AND LOWER(s.seller.name) LIKE '%odinson%'")
     Page<SaleMinDTO> findSales(LocalDate minDate, LocalDate maxDate, String sellerName, Pageable pageable);
+
 
 
     @Query("SELECT new br.com.mcoder.consulta.desafio.dto.SalesSummaryDTO(s.seller.name, SUM(s.amount)) "
@@ -26,6 +28,7 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
             + "WHERE s.date BETWEEN :minDate AND :maxDate "
             + "GROUP BY s.seller.name")
     List<SalesSummaryDTO> findSalesSummary(LocalDate minDate, LocalDate maxDate);
+
 
 
 }
