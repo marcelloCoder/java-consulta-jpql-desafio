@@ -35,14 +35,34 @@ public class SaleService {
 	}
 
 	public Page<SaleMinDTO> getSalesReport(String minDate, String maxDate, String sellerName, Pageable pageable) {
-		minDate = minDate != null ? minDate.trim() : null;
-		maxDate = maxDate != null ? maxDate.trim() : null;
+		// Se as datas não forem passadas, define os valores padrão
+		if (minDate == null || minDate.isBlank()) {
+			// 12 meses atrás
+			minDate = LocalDate.now().minusMonths(12).toString();
+		}
+		if (maxDate == null || maxDate.isBlank()) {
+			// Data atual
+			maxDate = LocalDate.now().toString();
+		}
 
-		LocalDate min = (minDate != null && !minDate.isBlank()) ? LocalDate.parse(minDate) : LocalDate.MIN;
-		LocalDate max = (maxDate != null && !maxDate.isBlank()) ? LocalDate.parse(maxDate) : LocalDate.MAX;
+		// Remove espaços em branco caso existam
+		minDate = minDate.trim();
+		maxDate = maxDate.trim();
 
+		// Converte as strings para LocalDate
+		LocalDate min = LocalDate.parse(minDate);
+		LocalDate max = LocalDate.parse(maxDate);
+
+		if (sellerName != null && !sellerName.isBlank()){
+			sellerName = sellerName.trim();
+		}else {
+			sellerName = null;
+		}
+
+		// Faz a consulta no repositório com as datas e o nome do vendedor
 		return repository.findSales(min, max, sellerName, pageable);
 	}
+
 
 	public List<SalesSummaryDTO> getSalesSummary(String minDateStr, String maxDateStr) {
 
