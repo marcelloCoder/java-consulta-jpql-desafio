@@ -8,19 +8,29 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface SaleRepository extends JpaRepository<Sale, Long> {
 
-    @Query("SELECT new br.com.mcoder.consulta.desafio.dto.SaleMinDTO(s.id, s.amount, s.date, s.seller.name) "
+    /*@Query("SELECT new br.com.mcoder.consulta.desafio.dto.SaleMinDTO(s.id, s.amount, s.date, s.seller.name) "
             + "FROM Sale s "
             + "WHERE s.date BETWEEN :minDate AND :maxDate "
             + "AND (:sellerName IS NULL OR :sellerName = '' OR LOWER(s.seller.name) LIKE LOWER(CONCAT('%', :sellerName, '%'))) "
-            + "AND LOWER(s.seller.name) LIKE '%odinson%'")
-    Page<SaleMinDTO> findSales(LocalDate minDate, LocalDate maxDate, String sellerName, Pageable pageable);
+            + "AND LOWER(s.seller.name) LIKE '%:sellerName%'")
+    Page<SaleMinDTO> findSales(LocalDate minDate, LocalDate maxDate, String sellerName, Pageable pageable);*/
 
+    @Query("SELECT new br.com.mcoder.consulta.desafio.dto.SaleMinDTO(s.id, s.amount, s.date, s.seller.name) "
+            + "FROM Sale s "
+            + "WHERE s.date BETWEEN :minDate AND :maxDate "
+            + "AND LOWER(s.seller.name) LIKE LOWER(CONCAT('%', :sellerName, '%'))")
+    Page<SaleMinDTO> findSales(
+            @Param("minDate") LocalDate minDate,
+            @Param("maxDate") LocalDate maxDate,
+            @Param("sellerName") String sellerName,
+            Pageable pageable);
 
 
     @Query("SELECT new br.com.mcoder.consulta.desafio.dto.SalesSummaryDTO(s.seller.name, SUM(s.amount)) "
@@ -28,6 +38,15 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
             + "WHERE s.date BETWEEN :minDate AND :maxDate "
             + "GROUP BY s.seller.name")
     List<SalesSummaryDTO> findSalesSummary(LocalDate minDate, LocalDate maxDate);
+
+    @Query("SELECT new br.com.mcoder.consulta.desafio.dto.SaleMinDTO(s.id, s.amount, s.date, s.seller.name) "
+            + "FROM Sale s "
+            + "WHERE s.date BETWEEN :minDate AND :maxDate "
+            + "AND LOWER(s.seller.name) LIKE LOWER(CONCAT('%', :name, '%'))")
+    List<SaleMinDTO> findByLastNameAndDate(
+            @Param("name") String name,
+            @Param("minDate") LocalDate minDate,
+            @Param("maxDate") LocalDate maxDate);
 
 
 
