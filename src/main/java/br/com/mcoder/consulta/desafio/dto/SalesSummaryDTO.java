@@ -10,7 +10,7 @@ public class SalesSummaryDTO {
         this.total = total;
     }
 
-    public SalesSummaryDTO(){
+    public SalesSummaryDTO() {
 
     }
 

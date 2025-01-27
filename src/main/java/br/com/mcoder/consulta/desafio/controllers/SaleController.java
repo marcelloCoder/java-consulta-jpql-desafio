@@ -21,20 +21,20 @@ import java.util.Optional;
 @RequestMapping(value = "/sales")
 public class SaleController {
 
-	@Autowired
-	private SaleService service;
-	
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<SaleMinDTO> findById(@PathVariable Long id) {
-		SaleMinDTO dto = service.findById(id);
-		return ResponseEntity.ok(dto);
-	}
+    @Autowired
+    private SaleService service;
 
-	@GetMapping
-	public ResponseEntity<Page<SaleMinDTO>> findAll(Pageable pageable){
-		Page<SaleMinDTO> dto =service.findAll(pageable);
-		return ResponseEntity.ok(dto);
-	}
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<SaleMinDTO> findById(@PathVariable Long id) {
+        SaleMinDTO dto = service.findById(id);
+        return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<SaleMinDTO>> findAll(Pageable pageable) {
+        Page<SaleMinDTO> dto = service.findAll(pageable);
+        return ResponseEntity.ok(dto);
+    }
 
 	/*@GetMapping(value = "/report")
 	public ResponseEntity<?> getReport() {
@@ -49,59 +49,56 @@ public class SaleController {
 	}*/
 
 
+    @GetMapping(value = "/report")
+    public ResponseEntity<Page<SaleMinDTO>> getReport(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String minDate,
+            @RequestParam(required = false) String maxDate,
+            Pageable pageable) {
 
-	@GetMapping(value = "/report")
-	public ResponseEntity<Page<SaleMinDTO>> getReport(
-			@RequestParam(required = false) String name,
-			@RequestParam(required = false) String minDate,
-			@RequestParam(required = false) String maxDate,
-			Pageable pageable) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            // Se minDate ou maxDate não forem fornecidos, calcula os valores padrão
+            LocalDate now = LocalDate.now();
+            if (name == null || name.trim().isEmpty()) {
+                name = null;
+            }
 
-		try {
-			// Formata a data no padrão esperado
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            minDate = (minDate == null || minDate.isBlank())
+                    ? now.minusMonths(12).format(formatter)
+                    : minDate.trim();
+            maxDate = (maxDate == null || maxDate.isBlank())
+                    ? now.format(formatter)
+                    : maxDate.trim();
 
-			// Se minDate ou maxDate não forem fornecidos, calcula os valores padrão
-			LocalDate now = LocalDate.now();
-			if (name == null || name.trim().isEmpty()){
-				name = null;
-			}
+            Page<SaleMinDTO> report = service.getSalesReport(minDate, maxDate, name, pageable);
+            return ResponseEntity.ok(report);
+        } catch (DateTimeParseException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 
-			minDate = (minDate == null || minDate.isBlank())
-					? now.minusMonths(12).format(formatter)
-					: minDate.trim();
-			maxDate = (maxDate == null || maxDate.isBlank())
-					? now.format(formatter)
-					: maxDate.trim();
+    @GetMapping(value = "/summary")
+    public ResponseEntity<List<SalesSummaryDTO>> getSummary(
+            @RequestParam(value = "minDate", required = false) String minDate,
+            @RequestParam(value = "maxDate", required = false) String maxDate) {
 
-			Page<SaleMinDTO> report = service.getSalesReport(minDate, maxDate, name, pageable);
-			return ResponseEntity.ok(report);
-		} catch (DateTimeParseException e) {
-			return ResponseEntity.badRequest().body(null); // Retorna erro 400 para datas inválidas
-		}
-	}
+        List<SalesSummaryDTO> summary = service.getSalesSummary(minDate, maxDate);
+        return ResponseEntity.ok(summary);
+    }
 
-	@GetMapping(value = "/summary")
-	public ResponseEntity<List<SalesSummaryDTO>> getSummary(
-			@RequestParam(value = "minDate", required = false) String minDate,
-			@RequestParam(value = "maxDate", required = false) String maxDate) {
-
-		List<SalesSummaryDTO> summary = service.getSalesSummary(minDate, maxDate);
-		return ResponseEntity.ok(summary);
-	}
-
-	@GetMapping("/lastname")
-	public ResponseEntity<List<SaleMinDTO>> findByLastnameAndDate(
-			@RequestParam String name,
-			@RequestParam(required = false) String minDate,
-			@RequestParam(required = false) String maxDate) {
-		try {
-			List<SaleMinDTO> result = service.getSalesByLastNameAndDate(name, minDate, maxDate);
-			return ResponseEntity.ok(result);
-		} catch (DateTimeParseException e) {
-			return ResponseEntity.badRequest().body(null);
-		}
-	}
+    @GetMapping("/lastname")
+    public ResponseEntity<List<SaleMinDTO>> findByLastnameAndDate(
+            @RequestParam String name,
+            @RequestParam(required = false) String minDate,
+            @RequestParam(required = false) String maxDate) {
+        try {
+            List<SaleMinDTO> result = service.getSalesByLastNameAndDate(name, minDate, maxDate);
+            return ResponseEntity.ok(result);
+        } catch (DateTimeParseException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 
 
 }

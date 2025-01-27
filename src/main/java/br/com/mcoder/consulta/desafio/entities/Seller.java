@@ -10,59 +10,59 @@ import java.util.List;
 @Table(name = "tb_seller")
 public class Seller {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private String name;
-	private String email;
-	private String phone;
-	
-	@OneToMany(mappedBy = "seller")
-	private List<Sale> sales = new ArrayList<>();
-	
-	public Seller() {
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private String email;
+    private String phone;
 
-	public Seller(Long id, String name, String email, String phone) {
-		this.id = id;
-		this.name = name;
-		this.email = email;
-		this.phone = phone;
-	}
+    @OneToMany(mappedBy = "seller")
+    private List<Sale> sales = new ArrayList<>();
 
-	public Long getId() {
-		return id;
-	}
+    public Seller() {
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Seller(Long id, String name, String email, String phone) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getPhone() {
-		return phone;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public List<Sale> getSales() {
-		return sales;
-	}	
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public List<Sale> getSales() {
+        return sales;
+    }
 }

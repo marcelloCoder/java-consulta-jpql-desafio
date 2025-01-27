@@ -9,66 +9,66 @@ import java.time.LocalDate;
 @Table(name = "tb_sales")
 public class Sale {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private Integer visited;
-	private Integer deals;
-	private Double amount;
-	private LocalDate date;
-	
-	@ManyToOne
-	@JoinColumn(name = "seller_id")
-	private Seller seller;
-	
-	public Sale() {
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private Integer visited;
+    private Integer deals;
+    private Double amount;
+    private LocalDate date;
 
-	public Long getId() {
-		return id;
-	}
+    @ManyToOne
+    @JoinColumn(name = "seller_id")
+    private Seller seller;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Sale() {
+    }
 
-	public Integer getVisited() {
-		return visited;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setVisited(Integer visited) {
-		this.visited = visited;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Integer getDeals() {
-		return deals;
-	}
+    public Integer getVisited() {
+        return visited;
+    }
 
-	public void setDeals(Integer deals) {
-		this.deals = deals;
-	}
+    public void setVisited(Integer visited) {
+        this.visited = visited;
+    }
 
-	public Double getAmount() {
-		return amount;
-	}
+    public Integer getDeals() {
+        return deals;
+    }
 
-	public void setAmount(Double amount) {
-		this.amount = amount;
-	}
+    public void setDeals(Integer deals) {
+        this.deals = deals;
+    }
 
-	public LocalDate getDate() {
-		return date;
-	}
+    public Double getAmount() {
+        return amount;
+    }
 
-	public void setDate(LocalDate date) {
-		this.date = date;
-	}
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
 
-	public Seller getSeller() {
-		return seller;
-	}
+    public LocalDate getDate() {
+        return date;
+    }
 
-	public void setSeller(Seller seller) {
-		this.seller = seller;
-	}
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
 }

@@ -49,5 +49,4 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
             @Param("maxDate") LocalDate maxDate);
 
 
-
 }
